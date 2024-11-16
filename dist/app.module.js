@@ -11,24 +11,30 @@ const common_1 = require("@nestjs/common");
 const user_module_1 = require("./user/user.module");
 const book_module_1 = require("./book/book.module");
 const typeorm_1 = require("@nestjs/typeorm");
+const user_entity_1 = require("./user/entities/user.entity");
+const book_entity_1 = require("./book/entities/book.entity");
+const config_1 = require("@nestjs/config");
+const auth_module_1 = require("./auth/auth.module");
 let AppModule = class AppModule {
 };
 exports.AppModule = AppModule;
 exports.AppModule = AppModule = __decorate([
     (0, common_1.Module)({
         imports: [
+            config_1.ConfigModule.forRoot(),
             user_module_1.UserModule,
             book_module_1.BookModule,
             typeorm_1.TypeOrmModule.forRoot({
-                type: 'mysql',
-                host: 'localhost',
-                port: 3306,
-                username: 'root',
-                password: 'root',
-                database: 'test',
-                entities: [],
+                type: 'postgres',
+                host: process.env.DB_NOST,
+                port: Number(process.env.DB_PORT) || 5432,
+                username: process.env.DB_USERNAME,
+                password: process.env.DB_PASSWORD,
+                database: process.env.DB_NAME,
+                entities: [user_entity_1.UserEntity, book_entity_1.BookEntity],
                 synchronize: true,
             }),
+            auth_module_1.AuthModule,
         ],
     })
 ], AppModule);

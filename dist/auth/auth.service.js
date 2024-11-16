@@ -16,6 +16,23 @@ let AuthService = class AuthService {
     constructor(userService) {
         this.userService = userService;
     }
+    async validateUser(email, password) {
+        const user = await this.userService.findByEmail(email);
+        if (user && user.password === password) {
+            const { password, ...result } = user;
+            return result;
+        }
+        return null;
+    }
+    async register(dto) {
+        try {
+            const userData = await this.userService.create(dto);
+            return userData;
+        }
+        catch (err) {
+            throw new common_1.ForbiddenException('ошибка при регистраци');
+        }
+    }
 };
 exports.AuthService = AuthService;
 exports.AuthService = AuthService = __decorate([
